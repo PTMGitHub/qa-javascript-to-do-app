@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript Tutorial - Working with JSON</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <h1>JavaScript Todo App</h1>
+        <div class="row mt-4">
+            <div class="col-8">
+                <ul id="todo-list"></ul>
+            </div>
+            <div class="col-4">
+                [add new]
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    var json_data = [
+        {
+            "userId": 1,
+            "id": 1,
+            "title": "lfdiuehf freiuhf ;owff;o",
+            "completed": false
+        },
+        {
+            "userId": 1,
+            "id": 2,
+            "title": "hshstrh thstsh",
+            "completed": false
+        },
+        {
+            "userId": 1,
+            "id": 3,
+            "title": "dsfrgf rgreg rega",
+            "completed": false
+        },
+        {
+            "userId": 1,
+            "id": 4,
+            "title": "asfasfae thstsh",
+            "completed": false
+        },
+        {
+            "userId": 1,
+            "id": 5,
+            "title": "exhnxfhn rgreg rega",
+            "completed": false
+        }
+    ];
+
+    var myList = document.getElementById("todo-list");
+
+    json_data.forEach(element => {
+        var listItem = document.createElement("li");
+        listItem.appendChild(
+            document.createTextNode(element.title)
+        );
+        myList.appendChild(listItem);
+    });
+</script>
+
+</html>
