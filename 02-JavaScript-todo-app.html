@@ -19,6 +19,8 @@
                     <input type="text" class="form-control" id="todoTitle" placeholder="Todo title...">
                     <button onclick="newTodo()" class="addBtn btn btn-sm btn-primary form-control mt-3">Add</span>
                 </form>
+                <button onclick="deleteAllTodos()" class="addBtn btn btn-sm btn-danger form-control mt-5">Delete
+                    All</span>
             </div>
         </div>
     </div>
@@ -106,6 +108,12 @@
             JSON.stringify(json_temp)
         );
         return todoID
+    }
+    function deleteAllTodos() {
+        if (confirm("Are you sure you want to delete all petal?")) {
+            localStorage.removeItem('json_data');
+            myList.innerHTML = '';
+        }
     }
 </script>
 
