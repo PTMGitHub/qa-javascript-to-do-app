@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>JavaScript Tutorial - Working with JSON</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" </head>
 
 <body>
@@ -36,7 +37,6 @@
     // }
     // ];
     var json_data = JSON.parse(localStorage.getItem('json_data'));
-    var myList = document.getElementById("todo-list");
 
     if (json_data) {
         json_data.forEach(element => {
@@ -47,63 +47,47 @@
     }
     registerEventListeners()
     function registerEventListeners() {
-        var closeButtons = document.getElementsByClassName("delete");
-        for (var i = 0; i < closeButtons.length; i++) {
-            closeButtons[i].addEventListener('click', deleteTodo, false);
-        }
+        $(".delete").on("click", function () {
+            var todoID = $(this).parent().attr('data-id');
+            deleteTodo(todoID);
+        })
     }
 
-    function deleteTodo() {
-        var li = this.parentElement;
-        myList.removeChild(li);
+    function deleteTodo(todoID) {
+        $("li[data-id=" + todoID + "]").slideUp();
         var json_temp = JSON.parse(localStorage.getItem('json_data'));
-        delete json_temp[li.dataset.id];
-        // how do we delete the item from json_temp without a unique identifier?
-        localStorage.setItem('json_data',
-            JSON.stringify(json_temp)
+        delete json_temp[todoID];
+        localStorage.setItem('json_data', JSON.stringify(json_temp)
         );
     }
 
     function newTodo(todoTitle, todoID) {
         if (!todoTitle && !todoID) {
             todoTitle = document.getElementById("todoTitle").value;
-            var todoID = storeTodoLocal(todoTitle);
-        };
-        var listItem = document.createElement("li");
-        listItem.dataset.id = todoID;
-        listItem.appendChild(
-            document.createTextNode(todoTitle)
-        );
+            if (todoTitle) {
+                var todoID = storeTodoLocal(todoTitle);
+            }
 
-        var deleteLink = document.createElement("a");
-        deleteLink.href = "#";
-        deleteLink.className = "btn btn-sm btn-danger m-1 delete";
-        deleteLink.appendChild(
-            document.createTextNode("Delete")
-        );
-        listItem.appendChild(deleteLink);
-        myList.appendChild(listItem);
-        registerEventListeners()
-        console.log("New item added");
-        console.log(listItem);
+        }
+        if (todoTitle) {
+            var todoHTML = '<li style="display:none" data-id="' + todoID + '">' + todoTitle + '<a href="#" class="btn btn-sm btn-danger m-1 delete">Delete</a></li>';
+            $("#todo-list").append(todoHTML);
+            $("li[data-id=" + todoID + "]").fadeIn();
+            registerEventListeners();
+        }
     }
     function storeTodoLocal(todoTitle, todoID) {
-        //retrieve and parse existing JSON from localstorge
         var json_temp = JSON.parse(localStorage.getItem('json_data'));
         if (!json_temp) {
             json_temp = [];
         }
-        //creating a new todo ID based on length of existing localstorage array
         var todoID = json_temp.length;
-        // add new todo object to JSON
         json_temp.push({
             "id": todoID,
             "title": todoTitle,
             "completed": false
         });
-        //log updated JSON
         console.log(json_data);
-        // stringify updated JSON and store back in localStorage
         localStorage.setItem('json_data',
             JSON.stringify(json_temp)
         );
@@ -112,7 +96,7 @@
     function deleteAllTodos() {
         if (confirm("Are you sure you want to delete all petal?")) {
             localStorage.removeItem('json_data');
-            myList.innerHTML = '';
+            $("#todo-list").empty();
         }
     }
 </script>
